@@ -1,0 +1,315 @@
+<!--Matyas Fenyves-->
+<html>
+	<head>
+		<title>Black and Red</title>
+		<link rel = "stylesheet" type = "text/css" href = "blackandred.css">
+		
+		<script type = "text/javascript">
+			//Dice variables
+			/*
+			These variables need values
+			var redDie;
+			var blackDie;
+			*/
+			var redDie = "";
+			var blackDie = "";
+
+			//Player token variables
+			playerRed = 10;
+			playerBlack = 10;
+			compRed = 10;
+			compBlack = 10;
+
+			var isPlayerTurn = true;
+			var choice = 0;
+
+			/*
+			These variables need to be separated with semicolons
+			var ADD_RED = 1, ADD_BLACK = 2, REMOVE_RED = 3, REMOVE_BLACK = 4;
+			*/
+			var ADD_RED = 1;
+			var ADD_BLACK = 2;
+			var REMOVE_RED = 3;
+			var REMOVE_BLACK = 4;
+
+			/*
+			None of these IDs exist yet, so this code must be placed at the bottom of the page
+			addRedBtn = document.getElementById("arrob");
+			addBlackBtn = document.getElementById("abror");
+			removeRedBtn = document.getElementById("rraob");
+			removeBlackBtn = document.getElementById("rbaor");
+			redDieResult = document.getElementById("reddie");
+			blackDieResult = document.getElementById("blackdie");
+			playerRedChipsOut = document.getElementById("pred");
+			playerBlackChipsOut = document.getElementById("pblack");
+			computerRedChipsOut = document.getElementById("compred");
+			computerBlackChipsOut = document.getElementById("compblack");
+			computerOutput = document.getElementById("compout");
+			rollDieBtn = document.getElementById("rollbtn");
+			*/
+
+			function rollDice()
+			{
+				redDie = parseInt(Math.random() * 6) + 1;
+				blackDie = parseInt(Math.random() * 6) + 1;
+			}
+
+			function toggleButtonActiveStatus()
+			{
+				addRedBtn.disabled = !addRedBtn.disabled;
+				addBlackBtn.disabled = !addBlackBtn.disabled;
+				removeRedBtn.disabled = !removeRedBtn.disabled;
+				removeBlackBtn.disabled = !removeBlackBtn.disabled;
+				rollDieBtn.disabled = !rollDieBtn.disabled;
+			}
+			
+			function adjustTokens()
+			{
+				/*
+				Need double equals sign here
+				if (choice = 1)
+				*/
+				if (choice == 1)
+				{
+					/*
+					Missing equals sign after plus
+					playerRed + redDie;
+					*/
+					playerRed += redDie;
+					compBlack -= blackDie;
+				}
+				
+				if (choice == 2)
+				{
+					playerBlack += blackDie;
+					compRed -= redDie;
+				}
+
+				if (choice == 3)
+				{
+					playerRed -= redDie;
+					compBlack += blackDie;
+				}
+				
+				if (choice == 4)
+				{
+					playerBlack -= blackDie;
+					compRed += redDie;
+				}
+
+				if (compBlack < 0)
+				{
+					compBlack = 0;
+				}
+				
+				if (playerBlack < 0)
+				{
+					playerBlack = 0;
+				}
+				
+				if (playerRed < 0)
+				{
+					playerRed = 0;
+				}
+				
+				if (compRed < 0)
+				{
+					compRed = 0;
+				}
+					
+				if (isPlayerTurn)
+				{
+					toggleButtonActiveStatus();
+				}
+					
+				isPlayerTurn = !isPlayerTurn;
+				
+				displayResults();
+				
+				checkWin();
+			}
+			
+			function checkWin()
+			{
+				if (playerBlack == 0 || compBlack == 0)// semicolon here out of place;
+				{
+					if (playerRed > compRed)
+					{
+						/*
+						Missing quotation marks
+						alert(You won!);
+						*/
+						alert("You won!");
+					}
+					else
+					{
+						if (playerRed < compRed)
+						{
+							alert("You lost!");
+						
+						}
+						else
+						{
+							alert("It's a tie!");
+						}
+					}
+					
+					rollDieBtn.disabled = true;
+				}
+			}
+			
+			function takeTurn()
+			{
+				rollDice();
+				/*
+				improper function call, need parenthesis
+				displayDice;
+				*/
+				displayDice();
+				
+				if (!isPlayerTurn)
+				{
+					/*
+					improper capitalization in function call
+					takecomputerTurn();
+					*/
+					takeComputerTurn();
+				}
+				else
+				{
+					toggleButtonActiveStatus();
+				}
+			}
+			
+			function takeComputerTurn()
+			{
+				choice = parseInt(Math.random() * 4) + 1;
+				adjustTokens();
+			}
+			
+			function displayDice()
+			{
+				redDieResult.src = "red" + redDie + ".bmp";
+				blackDieResult.src = "black" + blackDie + ".bmp";
+			}
+			
+			function displayResults()
+			{
+				if (isPlayerTurn)
+				{
+					if (choice == 1)
+					{
+						computerOutput.innerHTML = "Computer removed from its own black and added to your red.";
+					}
+					
+					
+					if (choice == 2)
+					{
+						/*
+						innerhtml must be innerHTML
+						computerOutput.innerhtml = "Computer removed from its own red and added to your black.";
+						*/
+						computerOutput.innerHTML = "Computer removed from its own red and added to your black.";
+					}
+					
+					if (choice == 3)
+					{
+						/*
+						innerhtml must be innerHTML
+						computerOutput.innerhtml = "Computer added to its own black and removed from your red.";
+						*/
+						computerOutput.innerHTML = "Computer added to its own black and removed from your red.";
+					}
+					
+					if (choice == 4)
+					{
+						/*
+						innerhtml must be innerHTML
+						computerOutput.innerhtml = "Computer added to its own red and removed from your black.";
+						*/
+						computerOutput.innerHTML = "Computer added to its own red and removed from your black.";
+					}
+					
+					rollDieBtn.innerHTML = "Roll Your Turn";
+				}
+				else
+				{
+					rollDieBtn.innerHTML = "Roll Computer's Turn";
+				}
+				/*
+				also miss spelled playerRed and do not need quotes around variable names
+				playerRedChipsOut.innerHTML = "layerRed";
+				playerBlackChipsOut.innerHTML = "playerBlack";
+				computerRedChipsOut.innerHTML = "compRed";
+				computerBlackChipsOut.innerHTML = "compBlack";
+				*/
+			playerRedChipsOut.innerHTML = playerRed;
+			playerBlackChipsOut.innerHTML = playerBlack;
+			computerRedChipsOut.innerHTML = compRed;
+			computerBlackChipsOut.innerHTML = compBlack;/*
+			function needs a closing brace
+			*/
+			}
+				
+		</script>
+	</head>
+	
+	<body>
+		<h1>Black and Red</h1>
+		<h2>Human Player</h2>
+			
+		<div>
+			<button id = "arrob" disabled = "true" onclick = "choice = ADD_RED; adjustTokens();">Add Red and Remove Opponent's Black</button><br /><br />
+			<button id = "abror" disabled = "true" onclick = "choice = ADD_BLACK; adjustTokens();">Add Black and Remove Opponent's Red</button>
+		</div>
+
+		<div >
+			<img src = "redchips.png" /> <img src = "blackchips.png" />
+			<span id = "pred">10</span>
+			<span id = "pblack">10</span>
+		</div>
+		
+	
+		<div>
+			<button id = "rraob" disabled = "true" onclick = "choice = REMOVE_RED; adjustTokens();">Remove Red and Add Opponent's Black</button><br /><br />
+			<button id = "rbaor" disabled = "true" onclick = "choice = REMOVE_BLACK; adjustTokens();">Remove Black and Add Opponent's Red</button>
+		</div>
+	
+		<hr />
+			
+		<span style = "width:32%"><img id = "reddie" /></span>
+		<span style = "width:32%"><button id = "rollbtn" onclick = "takeTurn();">Roll Your Turn</button></span>
+		<span style = "width:32%"><img id = "blackdie" /></span>
+			
+		<hr />
+
+		<h2>Computer Player</h2>
+	
+		<div id = "compout" ></div>
+		
+		<div>
+			<img src = "redchips.png" /><img src = "blackchips.png" />
+			<span id = "compred">10</span>
+			<span id = "compblack">10</span>
+		</div>
+		
+		<div id = "span_rbar" ></div>
+		
+	</body>
+	<script>
+		addRedBtn = document.getElementById("arrob");
+		addBlackBtn = document.getElementById("abror");
+		removeRedBtn = document.getElementById("rraob");
+		removeBlackBtn = document.getElementById("rbaor");
+		redDieResult = document.getElementById("reddie");
+		blackDieResult = document.getElementById("blackdie");
+		playerRedChipsOut = document.getElementById("pred");
+		playerBlackChipsOut = document.getElementById("pblack");
+		computerRedChipsOut = document.getElementById("compred");
+		computerBlackChipsOut = document.getElementById("compblack");
+		computerOutput = document.getElementById("compout");
+		rollDieBtn = document.getElementById("rollbtn");
+		
+		
+	</script>
+</html>
